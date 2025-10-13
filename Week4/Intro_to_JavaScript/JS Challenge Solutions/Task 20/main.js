@@ -1,0 +1,4 @@
+const numbers = [10,15,20,25,30];
+const filterArr = numbers.filter(b => b % 2 == 0);
+
+console.log(filterArr);

@@ -1,0 +1,20 @@
+@font-face {
+  font-family: 'Ghost Clan';
+  /* Choose a name for your font */
+  src: url('path/to/GhostClan.woff2') format('woff2'),
+    /* Path to WOFF2 format */
+    url('path/to/GhostClan.woff') format('woff'),
+    /* Path to WOFF format */
+    url('path/to/GhostClan.ttf') format('truetype');
+  /* Path to TTF format */
+  font-weight: normal;
+  /* Adjust as needed for different weights */
+  font-style: normal;
+  /* Adjust as needed for different styles */
+  font-display: swap;
+  /* Optional: Controls how font is loaded and displayed */
+}
+
+* {
+  font-family: 'Ghost Clan', sans-serif;
+}

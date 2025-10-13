@@ -7,6 +7,15 @@
         <title>Background Color</title>
     </head>
     <body>
+         <button>Change background color</button>
+
+
+        <script>
+            const button = document.querySelector("button");
+            button.addEventListener("click", () => {
+                document.body.style.backgroundColor = document.body.style.backgroundColor === "blue" ? "white" : "blue";
+            });
+        </script>
 
     </body>
 </html>
