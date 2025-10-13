@@ -52,10 +52,10 @@
 
 - Your frontend must interact with your API for data persistence
 - Your frontend must use the React library.
-    -- Your frontend must include at least 5 components, with at least one nested component. (At least one parent-child relationship, and at least one other unrelated component).
-        --- Your components should include at least one component that implements `useState`.
-        --- Your components should include at least one component with props.
-        --- Your components should include at least one component that implements the `Context` hook.
+  - Your frontend must include at least 5 components, with at least one nested component. (At least one parent-child relationship, and at least one other unrelated component).
+    - Your components should include at least one component that implements `useState`.
+    - Your components should include at least one component with props.
+    - Your components should include at least one component that implements the `Context` hook.
 - Your frontend must be built on the or Next.js frameworks.
 - Your fontend must be containerized in a Docker container for deployment
 - Your frontend must be deployed to an Azure App Service instance in the Azure cloud
@@ -65,14 +65,14 @@
 
 - Your project team should select a Team Lead to organize the development team efforts
 - Your project should include a Project Description document which details:
-    -- a description of the project
-    -- at least ten user stories for your applicaton
-    -- a wireframe diagram of the UI
-    -- an ERD (Entity Relationship Diagram) of the Database
-    -- unit test coverage reporting
-    -- API endpoint documentation
+  - a description of the project
+  - at least ten user stories for your applicaton
+  - a wireframe diagram of the UI
+  - an ERD (Entity Relationship Diagram) of the Database
+  - unit test coverage reporting
+  - API endpoint documentation
 - Your project team should conduct a daily stand-up meeting
-    -- meeting notes should be kept to record development progress
+  - meeting notes should be kept to record development progress
 
 ## Project Presentation
 
