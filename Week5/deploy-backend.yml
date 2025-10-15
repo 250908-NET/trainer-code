@@ -1,0 +1,84 @@
+name: Deploy Backend to AAR
+
+on: 
+    workflow_dispatch:
+    workflow_run:
+        workflows: 
+            - Docker Build Backend
+        types:
+            - completed
+        branches:
+            - dev
+            - demo
+            - main
+
+env:
+    AWS_REGION: us-west-2
+    ECR_REPOSITORY: /cde/backendv2
+ 
+jobs:
+    Deploy:
+        runs-on: ubuntu-latest
+
+        env:
+            TAG: |-
+                ${{ 
+                   (github.event.workflow_run.head_branch || github.ref_name) == 'main' && 'prod'
+                || (github.event.workflow_run.head_branch || github.ref_name) == 'demo' && 'demo'
+                || (github.event.workflow_run.head_branch || github.ref_name) == 'dev' && 'dev'
+                || 'NONE'
+                }}
+
+            APP_RUNNER_SERVICE: |-
+                ${{ 
+                   (github.event.workflow_run.head_branch || github.ref_name) == 'main' && 'CDE-Prod-Backend'
+                || (github.event.workflow_run.head_branch || github.ref_name) == 'demo' && 'CDE-Demo-Backend'
+                || (github.event.workflow_run.head_branch || github.ref_name) == 'dev' && 'CDE-Dev-Backend'
+                }}
+
+        steps:
+            - name: Validate Environment Variables
+              run: |
+                  echo "TAG: ${{ env.TAG }}"
+                  echo "APP_RUNNER_SERVICE: ${{ env.APP_RUNNER_SERVICE }}"
+                  echo "ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}"
+                  echo "AWS_REGION: ${{ env.AWS_REGION }}"
+
+            - name: Configure AWS credentials
+              if: env.TAG != 'NONE'
+              id: aws-credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: ${{ env.AWS_REGION }}
+
+            - name: Deploy to App Runner
+              if: env.TAG != 'NONE'
+              id: deploy-apprunner
+              run: |
+                  ECR_REGISTRY=$(aws ecr describe-registry --query 'registryId' --output text).dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+                  IMAGE_URI=$ECR_REGISTRY${{ env.ECR_REPOSITORY }}:${{ env.TAG }}
+          
+                  SERVICE_ARN=$(aws apprunner list-services \
+                    --query "ServiceSummaryList[?ServiceName=='${{ env.APP_RUNNER_SERVICE }}'].ServiceArn" \
+                    --output text)
+
+                  if [ -z "$SERVICE_ARN" ]; then
+                    echo "ERROR: App Runner service '${{ env.APP_RUNNER_SERVICE }}' not found!"
+                    exit 1
+                  fi
+
+                  OPERATION_ID=$(aws apprunner start-deployment \
+                    --service-arn "$SERVICE_ARN" \
+                    --query 'OperationId' \
+                    --output text)
+
+                  if [ -z "$OPERATION_ID" ]; then
+                    echo "ERROR: Failed to start deployment!"
+                    exit 1
+                  fi
+          
+                  echo "Deployment started for service: ${{ env.APP_RUNNER_SERVICE }}"
+                  echo "Image deployed: $IMAGE_URI"
+                  echo "Operation ID: $OPERATION_ID"
