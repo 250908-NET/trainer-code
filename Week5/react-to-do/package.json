@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --outDir build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "next": "^15.5.5",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
