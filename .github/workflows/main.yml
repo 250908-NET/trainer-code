@@ -28,6 +28,20 @@ jobs:
         
       - name: Dotnet Build
         run: dotnet build --no-restore ./Week5/CSTester/
+    
+  Containerize:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout - get the source code
+      uses: actions/checkout@v5.0.0      
+
+    - name: Docker Setup Buildx
+      uses: docker/setup-buildx-action@v3.11.1
+
+    - name: Docker Build
+      run: docker build --tag CSTester:latest -f ./Week5/CSTester/Dockerfile ./Week5/CSTester
+
 
           
           
