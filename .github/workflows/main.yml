@@ -1,0 +1,33 @@
+name: Build and Containerize Demo
+
+on: 
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - dev
+      
+    paths:
+      - Week5/CSTester/**
+
+jobs:
+  Compile:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout - get the source code
+        uses: actions/checkout@v5.0.0
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v5.0.0
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Dotnet Restore
+        run: dotnet restore ./Week5/CSTester/
+        
+      - name: Dotnet Build
+        run: dotnet build --no-restore ./Week5/CSTester/
+
+          
+          
