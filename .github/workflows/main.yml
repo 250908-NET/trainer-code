@@ -30,6 +30,7 @@ jobs:
         run: dotnet build --no-restore ./Week5/CSTester/
     
   Containerize:
+    needs: Compile
     runs-on: ubuntu-latest
 
     steps:
@@ -40,7 +41,7 @@ jobs:
       uses: docker/setup-buildx-action@v3.11.1
 
     - name: Docker Build
-      run: docker build --tag CSTester:latest -f ./Week5/CSTester/Dockerfile ./Week5/CSTester
+      run: docker build --tag cstester:latest -f ./Week5/CSTester/Dockerfile ./Week5/CSTester
 
 
           
